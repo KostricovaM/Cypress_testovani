@@ -4,13 +4,19 @@ describe('teacher orders an activity via form', () => {
         'Počet dětí', 've věku', 'Počet pedagogického doprovodu', 'Nástup', 'Strava začíná', 'Ukončení', 'Strava končí'] //Škola v přírodě
 
     const h4Titles = ['Kontaktní osoba', 'Požadovaný termín', 'Objednávaná služba']
-    const ico = '70999783' //if ICO is valid, automatically are fields 'Odběratel' and 'Úpná adresa' filled
-    const zastoupena = 'Jana Novotná'
-    const jmenoAPrijmeni = 'Milan Peterek'
+
+    const ico = '26435675' //if ICO is valid, automatically fields 'Odběratel' and 'Úpná adresa' are filled
+    const zastoupena = 'Karel Keeno'
+    const jmenoAPrijmeni = 'Bernard Novák'
     const telefon = '603 123 321'
-    const email = 'peterek@gmail.com'
-    // const termin1zac =
-    // const termin1kon =
+    const email = 'keeno@gmail.com'
+    const termin1zac = '09.01.2023'
+    const termin1kon = '13.01.2023'
+    const kurz = 'Odpolední'
+    const pocetDeti = '8'
+    const veVeku = '6'
+    const pocetPed = '2'
+
 
     it('visits the page', () => {
         cy.visit('https://czechitas-app.kutac.cz/')
@@ -25,13 +31,14 @@ describe('teacher orders an activity via form', () => {
 
         cy
             .get('.dropdown-item:visible')
+            .should('be.visible')
             .eq(1)
             .should('have.text', 'Objednávka pro MŠ/ZŠ')
             .click()
 
     })
 
-    it('checks the form', () => {
+    it('checks the form: titles, fields, icons', () => {
         cy
             .get('.card-body')
             .within(() => {
@@ -87,6 +94,8 @@ describe('teacher orders an activity via form', () => {
                 cy
                     .get('.input-group-prepend')
                     .should('have.length', 8)
+                    .should('be.visible')
+
 
                 cy
                     .get('.form-control')
@@ -124,12 +133,107 @@ describe('teacher orders an activity via form', () => {
                 cy
                     .get('.nav-tabs')
                     .should('have.length', 1)
+                    .should('be.visible')
                     .should('include.text', 'Příměstský tábor')
                     .should('include.text', 'Škola v přírodě')
 
                 cy
                     .get('#nav-home-tab')
+                    .should('be.visible')
                     .click()
+
+                cy
+                    .get('#camp-date_part>option')
+                    .should('be.visible')
+                    .should('have.length', 2)
+                    .eq(0)
+                    .should('have.text', 'Dopolední')
+
+                cy
+                    .get('#camp-date_part>option')
+                    .eq(1)
+                    .should('have.text', 'Odpolední')
+
+                cy
+                    .get('.btn-primary')
+                    .should('be.visible')
+                    .should('have.length', 2)
+                    .eq(0)
+                    .should('have.attr', 'value', 'Uložit objednávku')
+
+                cy
+                    .get('.btn-primary')
+                    .should('exist')
+                    .eq(1)
+                    .should('have.attr', 'value', 'Uložit objednávku')
+
             })
+    })
+
+    it('fills in the form', () => {
+        cy
+            .get('#ico')
+            .type(ico)
+
+
+        cy
+            .get('#ico')
+            .type('{enter}')
+
+
+        cy
+            .get('#substitute')
+            .type(zastoupena)
+
+        cy
+            .get('#contact_name')
+            .type(jmenoAPrijmeni)
+
+        cy
+            .get('#contact_tel')
+            .type(telefon)
+
+        cy
+            .get('#contact_mail')
+            .type(email)
+
+        cy
+            .get('#start_date_1')
+            .type(termin1zac)
+
+        cy
+            .get('#end_date_1')
+            .type(termin1kon)
+
+
+        cy
+            .get('.nav-tabs')
+            .should('include.text', 'Příměstský tábor')
+            .click()
+
+        cy
+            .get('#camp-date_part')
+            .type(kurz)
+
+        cy
+            .get('#camp-students')
+            .type(pocetDeti)
+
+        cy
+            .get('#start_date_1')
+            .type(veVeku)
+
+        cy
+            .get('#camp-adults')
+            .type(pocetPed)
+
+    })
+
+
+    it('sends the form', () => {
+        cy
+            .get('.btn-primary')
+            .eq(0)
+            .click()
     })
 })
