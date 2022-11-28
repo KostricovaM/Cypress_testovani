@@ -1,6 +1,42 @@
+!run test:
+arrow up / npx cypress open
+
+id selector - #
+
+click body
+cy
+      .get('body')
+      .click(0, 0)
+
+
+
+click esc
+cy
+      .get('body')
+      .type('{esc}')
+
+
+
 describe('xxx', () => {
 
     it('can ...', () => {
       
     })
 })
+
+
+.then
+.each(($el, i) => {
+                cy
+                    .wrap($el)
+                    .invoke('text')
+                    .then(()=>{
+                        
+                    })
+
+.within(() => {})
+.within(() => {
+                cy
+                    .get()
+                    .type()
+                    })
