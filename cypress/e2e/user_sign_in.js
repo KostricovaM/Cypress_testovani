@@ -1,4 +1,10 @@
 describe('buttons check on homepage', () => {
+    beforeEach(() => {
+        cy
+            .intercept('POST', 'https://czechitas-app.kutac.cz/prihlaseni')
+            .as('prihlaseni')
+    })
+
     const userName = 'Terezka Adamová'
     const userEmail = 'terka.adam@gmail.com'
     const userPassword = 'Mojeheslo123'
@@ -18,14 +24,16 @@ describe('buttons check on homepage', () => {
             .get('#email')
             .type(userEmail)
 
-            cy
+        cy
             .get('#password')
             .type(userPassword)
 
-            cy
+        cy
             .get('.btn-primary')
             .click()
-
+            .wait('@prihlaseni')
+            .its('response.statusCode')
+            .should('eq', 302)
 
     })
 
@@ -36,7 +44,7 @@ describe('buttons check on homepage', () => {
             .contains(userName)
             .click()
 
-            cy
+        cy
             .get('#logout-link')
             .click()
 
@@ -44,8 +52,8 @@ describe('buttons check on homepage', () => {
 
     it('checks signing out', () => {
         cy
-        .get('.nav-item.nav-link')
-        .contains('Přihlásit')
+            .get('.nav-item.nav-link')
+            .contains('Přihlásit')
 
     })
 })
